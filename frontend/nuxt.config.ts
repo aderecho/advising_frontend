@@ -54,6 +54,5 @@ export default defineNuxtConfig({
     '/admin/**': { ssr: false },
     '/our/**': { ssr: false },
     '/student/**': { ssr: false },
-    '/student/**': { ssr: false },
   },
 })

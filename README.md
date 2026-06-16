@@ -1,58 +1,157 @@
-<p align="center"><a href="https://laravel.com" target="_blank"><img src="https://raw.githubusercontent.com/laravel/art/master/logo-lockup/5%20SVG/2%20CMYK/1%20Full%20Color/laravel-logolockup-cmyk-red.svg" width="400" alt="Laravel Logo"></a></p>
+# Advisement Management System (Aderecho Advising)
 
-<p align="center">
-<a href="https://github.com/laravel/framework/actions"><img src="https://github.com/laravel/framework/workflows/tests/badge.svg" alt="Build Status"></a>
-<a href="https://packagist.org/packages/laravel/framework"><img src="https://img.shields.io/packagist/dt/laravel/framework" alt="Total Downloads"></a>
-<a href="https://packagist.org/packages/laravel/framework"><img src="https://img.shields.io/packagist/v/laravel/framework" alt="Latest Stable Version"></a>
-<a href="https://packagist.org/packages/laravel/framework"><img src="https://img.shields.io/packagist/l/laravel/framework" alt="License"></a>
-</p>
+A comprehensive, role-based student advisement and curriculum management portal. The system is designed to streamline academic advising, prospectus tracking, and curriculum building for students, academic advisers, evaluators, and the Office of the University Registrar (OUR).
 
-## About Laravel
+---
 
-Laravel is a web application framework with expressive, elegant syntax. We believe development must be an enjoyable and creative experience to be truly fulfilling. Laravel takes the pain out of development by easing common tasks used in many web projects, such as:
+## 🚀 Tech Stack
 
-- [Simple, fast routing engine](https://laravel.com/docs/routing).
-- [Powerful dependency injection container](https://laravel.com/docs/container).
-- Multiple back-ends for [session](https://laravel.com/docs/session) and [cache](https://laravel.com/docs/cache) storage.
-- Expressive, intuitive [database ORM](https://laravel.com/docs/eloquent).
-- Database agnostic [schema migrations](https://laravel.com/docs/migrations).
-- [Robust background job processing](https://laravel.com/docs/queues).
-- [Real-time event broadcasting](https://laravel.com/docs/broadcasting).
+The project features a modern decoupled architecture:
 
-Laravel is accessible, powerful, and provides tools required for large, robust applications.
+### Frontend
+- **Framework**: [Nuxt.js 4](https://nuxt.com/) (Vue 3, TypeScript)
+- **State Management**: [Pinia](https://pinia.vuejs.org/)
+- **Styling**: [Tailwind CSS v4](https://tailwindcss.com/) with Vite
+- **Typography**: Poppins (Google Fonts)
 
-## Learning Laravel
+### Backend
+- **Framework**: [Laravel 13](https://laravel.com/) (PHP 8.3+)
+- **Authentication**: [Laravel Sanctum](https://laravel.com/docs/sanctum) (Cookie/session-based API authentication)
+- **Database**: SQLite (default, configurable via `.env`)
 
-Laravel has the most extensive and thorough [documentation](https://laravel.com/docs) and video tutorial library of all modern web application frameworks, making it a breeze to get started with the framework.
+---
 
-In addition, [Laracasts](https://laracasts.com) contains thousands of video tutorials on a range of topics including Laravel, modern PHP, unit testing, and JavaScript. Boost your skills by digging into our comprehensive video library.
+## 👥 Roles & Features
 
-You can also watch bite-sized lessons with real-world projects on [Laravel Learn](https://laravel.com/learn), where you will be guided through building a Laravel application from scratch while learning PHP fundamentals.
+The platform provides dedicated workflows for five distinct user roles:
 
-## Agentic Development
+### 1. 🎓 Students (`student`)
+- **Interactive Dashboard**: Track completed courses, current enrollment, and remaining subjects.
+- **Prospectus Checklists**: Visualize academic progress through a dynamic prospectus flow.
+- **Advisement Tracking**: Submit and view status updates for academic advisement.
 
-Laravel's predictable structure and conventions make it ideal for AI coding agents like Claude Code, Cursor, and GitHub Copilot. Install [Laravel Boost](https://laravel.com/docs/ai) to supercharge your AI workflow:
+### 2. 🛠️ Administrators (`admin`)
+- **Curriculum Builder**: Build, structure, and organize curriculum paths.
+- **Prospectus Previewer**: Live visual validation of the academic prospectus.
+- **Publish Workflow**: Seal and publish curriculum revisions to the system.
 
-```bash
-composer require laravel/boost --dev
+### 3. 🏛️ Office of the University Registrar (`our`)
+- **Course Catalog Management**: Manage global subjects, courses, and prerequisites.
+- **Advising Monitor**: Real-time status views of all active student advisements.
+- **Curriculum Reception**: Verify, approve, and finalize incoming curriculum packages.
+- **Student Summary Records**: Review consolidated academic history and progress reports.
 
-php artisan boost:install
+### 4. 🧑‍🏫 Advisers (`adviser`)
+- Review student academic files, clear students for enrollment, and provide guidance comments.
+
+### 5. 🔍 Evaluators (`evaluator`)
+- Perform pre-graduation checks, transfer-credit evaluations, and official syllabus matching.
+
+---
+
+## 📁 Project Structure
+
+```
+advisement_management/
+├── app/                      # Laravel Backend Application Logic
+│   ├── Enums/                # UserRole & general enumerations
+│   ├── Http/Controllers/     # API & Web Controllers grouped by Role
+│   └── Models/               # Eloquent Database Models
+├── bootstrap/                # Laravel bootstrapping files
+├── config/                   # Laravel configurations
+├── database/                 # Database migrations, seeders, and SQLite db
+│   ├── migrations/           # Database Schema definitions
+│   └── seeders/              # Initial accounts and lookup tables
+├── routes/                   # Clean role-based route splits
+│   ├── admin.php             # Admin endpoints
+│   ├── adviser.php           # Adviser endpoints
+│   ├── api.php               # Sanctum auth & utility endpoints
+│   ├── evaluator.php         # Evaluator endpoints
+│   ├── our.php               # Registrar endpoints
+│   ├── student.php           # Student endpoints
+│   └── web.php               # Default web endpoints
+├── frontend/                 # Nuxt.js 4 Frontend Application
+│   ├── app/                  # Main frontend pages, stores, and layouts
+│   │   ├── pages/            # Role-scoped pages (admin/, student/, our/)
+│   │   ├── stores/           # Pinia stores (auth, curriculum, etc.)
+│   │   └── layouts/          # Layout configurations
+│   ├── nuxt.config.ts        # Nuxt 4 configuration & Nitro dev proxy
+│   └── package.json          # Node dependencies (Tailwind 4, Vue 3, Pinia)
+├── composer.json             # Composer PHP packages (Laravel 13, Sanctum)
+└── package.json              # Main workspace scripts
 ```
 
-Boost provides your agent 15+ tools and skills that help agents build Laravel applications while following best practices.
+---
 
-## Contributing
+## 🛠️ Getting Started
 
-Thank you for considering contributing to the Laravel framework! The contribution guide can be found in the [Laravel documentation](https://laravel.com/docs/contributions).
+### 📋 Prerequisites
+- **PHP**: `^8.3`
+- **Composer**: Latest Stable
+- **Node.js**: `^18` or `^20`
 
-## Code of Conduct
+### 1. Backend Setup (Laravel)
+Navigate to the root directory and complete these steps:
 
-In order to ensure that the Laravel community is welcoming to all, please review and abide by the [Code of Conduct](https://laravel.com/docs/contributions#code-of-conduct).
+1. **Install dependencies**:
+   ```bash
+   composer install
+   ```
 
-## Security Vulnerabilities
+2. **Configure Environment File**:
+   Copy `.env.example` to `.env`:
+   ```bash
+   copy .env.example .env
+   ```
 
-If you discover a security vulnerability within Laravel, please send an e-mail to Taylor Otwell via [taylor@laravel.com](mailto:taylor@laravel.com). All security vulnerabilities will be promptly addressed.
+3. **Generate Application Key**:
+   ```bash
+   php artisan key:generate
+   ```
 
-## License
+4. **Prepare Database**:
+   Create the SQLite database file if it doesn't exist (configured default is SQLite):
+   ```bash
+   # In Windows PowerShell:
+   New-Item -ItemType File -Path database\database.sqlite -Force
+   ```
+   Then run migrations and seed the initial users/lookups:
+   ```bash
+   php artisan migrate --seed
+   ```
 
-The Laravel framework is open-sourced software licensed under the [MIT license](https://opensource.org/licenses/MIT).
+5. **Start Dev Server**:
+   ```bash
+   php artisan serve
+   ```
+   *The backend will be running on `http://127.0.0.1:8000`.*
+
+### 2. Frontend Setup (Nuxt 4)
+Navigate to the `/frontend` directory:
+
+1. **Install node modules**:
+   ```bash
+   cd frontend
+   npm install
+   ```
+
+2. **Start Dev Server**:
+   ```bash
+   npm run dev
+   ```
+   *The Nuxt development server will start on `http://localhost:3000`.*
+   *Note: Nitro is pre-configured to proxy API calls (`/api`, `/sanctum`) to port 8000.*
+
+---
+
+## 🔑 Seed Accounts for Testing
+
+All seeded accounts share the password: `password`
+
+| Role | Email | Password |
+|---|---|---|
+| **System Admin** | `admin@advisement.test` | `password` |
+| **OUR Registrar** | `our@advisement.test` | `password` |
+| **Adviser** | `adviser@advisement.test` | `password` |
+| **Student** | `student@advisement.test` | `password` |
+| **Evaluator** | `evaluator@advisement.test` | `password` |
