@@ -1,0 +1,19 @@
+@import 'tailwindcss';
+
+@theme {
+  --font-sans: 'Poppins', ui-sans-serif, system-ui, sans-serif;
+  --color-up-maroon: #8a1538;
+  --color-up-maroon-dark: #6e1130;
+  --color-up-yellow: #ffb81c;
+  --color-up-yellow-dark: #e6a619;
+  --color-up-green: #00573f;
+  --color-up-green-dark: #004532;
+  --color-surface: #f4f6f8;
+  --color-surface-elevated: #ffffff;
+  --shadow-card: 0 1px 3px 0 rgb(15 23 42 / 0.06), 0 1px 2px -1px rgb(15 23 42 / 0.06);
+  --shadow-card-hover: 0 10px 25px -5px rgb(15 23 42 / 0.08), 0 4px 6px -4px rgb(15 23 42 / 0.06);
+}
+
+body {
+  @apply bg-surface font-sans text-slate-800 antialiased;
+}
