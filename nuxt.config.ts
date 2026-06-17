@@ -25,6 +25,7 @@ export default defineNuxtConfig({
     public: {
       // Leave empty in dev to use the Nitro proxy (same-origin cookies + CSRF).
       apiBase: process.env.NUXT_PUBLIC_API_BASE ?? '',
+      apiUrl: process.env.NUXT_PUBLIC_API_URL ?? '/api',
     },
   },
 

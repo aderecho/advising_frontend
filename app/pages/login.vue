@@ -9,14 +9,6 @@ function submit() {
   navigateTo('/admin/curriculum-builder')
 }
 
-function demoLogin(role: 'admin' | 'our' | 'student') {
-  const routes = {
-    admin: '/admin/curriculum-builder',
-    our: '/our/course-catalog',
-    student: '/student/dashboard',
-  }
-  navigateTo(routes[role])
-}
 </script>
 
 <template>
@@ -55,31 +47,5 @@ function demoLogin(role: 'admin' | 'our' | 'student') {
       </button>
     </form>
 
-    <div class="mt-6 border-t border-slate-100 pt-5">
-      <p class="mb-3 text-center text-xs font-medium text-slate-400 uppercase tracking-wide">Demo access</p>
-      <div class="grid grid-cols-3 gap-2">
-        <button
-          type="button"
-          class="rounded-xl border border-slate-200 py-2 text-xs font-semibold text-slate-600 transition hover:border-up-maroon/30 hover:bg-up-maroon/5 hover:text-up-maroon"
-          @click="demoLogin('admin')"
-        >
-          Admin UI
-        </button>
-        <button
-          type="button"
-          class="rounded-xl border border-slate-200 py-2 text-xs font-semibold text-slate-600 transition hover:border-up-maroon/30 hover:bg-up-maroon/5 hover:text-up-maroon"
-          @click="demoLogin('our')"
-        >
-          OUR UI
-        </button>
-        <button
-          type="button"
-          class="rounded-xl border border-slate-200 py-2 text-xs font-semibold text-slate-600 transition hover:border-up-maroon/30 hover:bg-up-maroon/5 hover:text-up-maroon"
-          @click="demoLogin('student')"
-        >
-          Student UI
-        </button>
-      </div>
-    </div>
   </div>
 </template>

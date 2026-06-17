@@ -1,17 +1,34 @@
 <script setup lang="ts">
+import { storeToRefs } from 'pinia'
+
 definePageMeta({ layout: 'app' })
 
-const {
-  courses,
-  summaryItems,
-  curriculumYears,
-  departmentsColleges,
-  programDurations,
-} = useAdminMockData()
+const { courses, summaryItems } = useAdminMockData()
 
-const curriculumYear = ref('2026-2027')
-const department = ref('cos')
-const programDuration = ref('4-years')
+const curriculumStore = useCurriculumStore()
+const { curriculumYears, colleges, programs, loading } = storeToRefs(curriculumStore)
+
+onMounted(() => {
+  curriculumStore.fetchInitialData()
+})
+
+const programId = ref('')
+const curriculumYearId = ref('')
+const departmentId = ref('')
+const programDuration = ref('')
+
+const uniqueDurations = computed(() => {
+  const durations = programs.value.map(p => p.duration_years).filter(Boolean)
+  return [...new Set(durations)].sort()
+})
+
+// Auto-populate duration if a program is selected
+watch(programId, (newId) => {
+  const selectedProgram = programs.value.find(p => String(p.id) === String(newId))
+  if (selectedProgram && selectedProgram.duration_years) {
+    programDuration.value = String(selectedProgram.duration_years)
+  }
+})
 </script>
 
 <template>
@@ -27,23 +44,31 @@ const programDuration = ref('4-years')
         description="Basic details for the curriculum you are creating."
       >
         <div class="grid gap-5 sm:grid-cols-2">
-          <AdminFormField label="Program name" placeholder="e.g. BS Information Technology" class="sm:col-span-2" />
-          <AdminFormField v-model="curriculumYear" label="Curriculum year" type="select">
-            <option value="">Select curriculum year</option>
-            <option v-for="year in curriculumYears" :key="year.value" :value="year.value">
-              {{ year.label }}
+          <AdminFormField v-model="programId" label="Program" type="select" class="sm:col-span-2" :disabled="loading">
+            <option value="">{{ loading ? 'Loading programs...' : (programs.length ? 'Select program' : 'No programs available') }}</option>
+            <option v-for="program in programs" :key="program.id" :value="program.id">
+              {{ program.code }} - {{ program.name }}
             </option>
           </AdminFormField>
-          <AdminFormField v-model="department" label="Department / college" type="select">
-            <option value="">Select department or college</option>
-            <option v-for="college in departmentsColleges" :key="college.value" :value="college.value">
-              {{ college.label }}
+          
+          <AdminFormField v-model="curriculumYearId" label="Curriculum year" type="select" :disabled="loading">
+            <option value="">{{ loading ? 'Loading years...' : (curriculumYears.length ? 'Select curriculum year' : 'No years available') }}</option>
+            <option v-for="year in curriculumYears" :key="year.id" :value="year.id">
+              {{ year.year }}
             </option>
           </AdminFormField>
-          <AdminFormField v-model="programDuration" label="Program duration" type="select" class="sm:col-span-2">
-            <option value="">Select program duration</option>
-            <option v-for="duration in programDurations" :key="duration.value" :value="duration.value">
-              {{ duration.label }}
+          
+          <AdminFormField v-model="departmentId" label="Department / college" type="select" :disabled="loading">
+            <option value="">{{ loading ? 'Loading departments...' : (colleges.length ? 'Select department or college' : 'No departments available') }}</option>
+            <option v-for="college in colleges" :key="college.id" :value="college.id">
+              {{ college.name }}
+            </option>
+          </AdminFormField>
+          
+          <AdminFormField v-model="programDuration" label="Program duration" type="select" class="sm:col-span-2" :disabled="loading">
+            <option value="">{{ loading ? 'Loading durations...' : (uniqueDurations.length ? 'Select program duration' : 'No durations available') }}</option>
+            <option v-for="duration in uniqueDurations" :key="duration" :value="duration">
+              {{ duration }} years
             </option>
           </AdminFormField>
         </div>
