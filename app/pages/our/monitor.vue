@@ -32,6 +32,19 @@ const statusFilter = ref('')
 const adviserSearch = ref('')
 const showAddModal = ref(false)
 
+const selectedCurriculum = ref<any>(null)
+const monitorMode = ref<'list' | 'view' | 'review' | 'validate'>('list')
+
+function handleAction(action: 'view' | 'review' | 'validate', row: any) {
+  selectedCurriculum.value = row
+  monitorMode.value = action
+}
+
+function exitAction() {
+  selectedCurriculum.value = null
+  monitorMode.value = 'list'
+}
+
 const adviserForm = reactive({
   firstName: '',
   middleName: '',
@@ -97,7 +110,8 @@ function submitAdviser() {
 
     <!-- Monitor Curriculum -->
     <div v-if="activeTab === 'curriculum'" class="space-y-4">
-      <div class="flex flex-wrap items-center justify-between gap-3">
+      <template v-if="monitorMode === 'list'">
+        <div class="flex flex-wrap items-center justify-between gap-3">
         <h2 class="text-sm font-bold tracking-wide text-slate-900 uppercase">Monitor Curriculum</h2>
         <select
           v-model="departmentFilter"
@@ -138,14 +152,14 @@ function submitAdviser() {
                   <OurStatusBadge :label="row.status" :variant="ourStatusVariant(row.status)" />
                 </td>
                 <td class="px-4 py-3">
-                  <div class="flex flex-wrap justify-center gap-2">
-                    <button type="button" class="rounded-lg bg-slate-500 px-3 py-1.5 text-xs font-semibold text-white hover:bg-slate-600">
+                  <div class="flex items-center justify-center gap-2">
+                    <button type="button" class="rounded-lg bg-slate-500 px-3 py-1.5 text-xs font-semibold text-white hover:bg-slate-600" @click="handleAction('view', row)">
                       View
                     </button>
-                    <button type="button" class="rounded-lg bg-up-maroon px-3 py-1.5 text-xs font-semibold text-white hover:bg-up-maroon-dark">
+                    <button type="button" class="rounded-lg bg-up-maroon px-3 py-1.5 text-xs font-semibold text-white hover:bg-up-maroon-dark" @click="handleAction('review', row)">
                       Review
                     </button>
-                    <button type="button" class="rounded-lg bg-sky-600 px-3 py-1.5 text-xs font-semibold text-white hover:bg-sky-700">
+                    <button type="button" class="rounded-lg bg-sky-600 px-3 py-1.5 text-xs font-semibold text-white hover:bg-sky-700" @click="handleAction('validate', row)">
                       Validate
                     </button>
                   </div>
@@ -153,6 +167,43 @@ function submitAdviser() {
               </tr>
             </tbody>
           </table>
+        </div>
+      </div>
+      </template>
+
+      <div v-else class="rounded-xl border border-slate-200 bg-white p-6 shadow-[var(--shadow-card)]">
+        <div class="mb-6 flex items-center justify-between border-b border-slate-100 pb-4">
+          <div>
+            <h2 class="text-sm font-bold uppercase tracking-wide text-slate-900">
+              <span v-if="monitorMode === 'view'">Viewing Curriculum</span>
+              <span v-else-if="monitorMode === 'review'">Reviewing Curriculum</span>
+              <span v-else-if="monitorMode === 'validate'">Validating Curriculum</span>
+            </h2>
+            <p class="mt-1 text-xs text-slate-500">{{ selectedCurriculum?.program }} ({{ selectedCurriculum?.curriculumYear }})</p>
+          </div>
+          <div class="flex items-center gap-3">
+            <button
+              type="button"
+              class="rounded-lg bg-slate-100 px-4 py-2 text-xs font-semibold text-slate-600 transition hover:bg-slate-200"
+              @click="exitAction"
+            >
+              Back to List
+            </button>
+            <button
+              v-if="monitorMode === 'validate' || monitorMode === 'review'"
+              type="button"
+              class="rounded-lg bg-up-green px-4 py-2 text-xs font-semibold text-white transition hover:bg-up-green-dark"
+              @click="exitAction"
+            >
+              {{ monitorMode === 'validate' ? 'Mark Validated' : 'Approve' }}
+            </button>
+          </div>
+        </div>
+        
+        <div class="rounded-lg border border-dashed border-slate-300 bg-slate-50 py-24 text-center">
+          <p class="text-sm text-slate-500">
+            Detailed view for <strong>{{ selectedCurriculum?.program }}</strong> will be displayed here.
+          </p>
         </div>
       </div>
     </div>

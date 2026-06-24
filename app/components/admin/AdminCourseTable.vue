@@ -3,6 +3,11 @@ import type { CourseRow } from '~/composables/useAdminMockData'
 
 defineProps<{ courses: CourseRow[] }>()
 
+defineEmits<{
+  edit: [course: CourseRow]
+  delete: [course: CourseRow]
+}>()
+
 const totalUnits = (courses: CourseRow[]) => courses.reduce((sum, c) => sum + c.units, 0)
 </script>
 
@@ -32,7 +37,7 @@ const totalUnits = (courses: CourseRow[]) => courses.reduce((sum, c) => sum + c.
             <td class="px-5 py-3.5 text-slate-800">{{ course.title }}</td>
             <td class="px-5 py-3.5 text-center text-slate-700">{{ course.units }}</td>
             <td class="px-5 py-3.5 text-center">
-              <span class="inline-flex rounded-md bg-slate-100 px-2 py-0.5 text-xs font-medium text-slate-600">
+              <span class="inline-flex rounded-md bg-up-green px-2 py-0.5 text-xs font-medium text-white">
                 {{ course.type }}
               </span>
             </td>
@@ -43,6 +48,7 @@ const totalUnits = (courses: CourseRow[]) => courses.reduce((sum, c) => sum + c.
                   type="button"
                   class="rounded-lg p-2 text-up-green transition hover:bg-up-green/10"
                   aria-label="Edit"
+                  @click="$emit('edit', course)"
                 >
                   <svg class="h-4 w-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                     <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M11 5H6a2 2 0 00-2 2v11a2 2 0 002 2h11a2 2 0 002-2v-5m-1.414-9.414a2 2 0 112.828 2.828L11.828 15H9v-2.828l8.586-8.586z"/>
@@ -52,6 +58,7 @@ const totalUnits = (courses: CourseRow[]) => courses.reduce((sum, c) => sum + c.
                   type="button"
                   class="rounded-lg p-2 text-up-maroon transition hover:bg-up-maroon/10"
                   aria-label="Delete"
+                  @click="$emit('delete', course)"
                 >
                   <svg class="h-4 w-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                     <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 7l-.867 12.142A2 2 0 0116.138 21H7.862a2 2 0 01-1.995-1.858L5 7m5 4v6m4-6v6m1-10V4a1 1 0 00-1-1h-4a1 1 0 00-1 1v3M4 7h16"/>
@@ -63,9 +70,9 @@ const totalUnits = (courses: CourseRow[]) => courses.reduce((sum, c) => sum + c.
         </tbody>
       </table>
     </div>
-    <div class="flex items-center justify-between border-t border-slate-200 bg-slate-50/60 px-5 py-3.5 text-sm">
-      <span class="text-slate-500">Total units</span>
-      <span class="font-semibold text-up-green">{{ totalUnits(courses) }}</span>
+    <div class="flex items-center justify-between border-t border-slate-200 bg-slate-50/60 px-5 py-3.5 text-sm font-bold">
+      <span class="text-slate-700">Total units</span>
+      <span class="text-up-green">{{ totalUnits(courses) }}</span>
     </div>
   </div>
 </template>
