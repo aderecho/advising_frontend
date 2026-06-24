@@ -4,7 +4,7 @@ defineProps<{ title?: string }>()
 
 <template>
   <div class="overflow-hidden rounded-xl border border-slate-200 bg-white shadow-[var(--shadow-card)]">
-    <div class="bg-up-maroon px-6 py-3.5 text-center">
+    <div v-if="title !== ''" class="bg-up-maroon px-6 py-3.5 text-center">
       <h1 class="text-base font-semibold tracking-wide text-white">
         {{ title ?? 'Academic Advisement' }}
       </h1>

@@ -70,7 +70,7 @@ export interface ReceivedCurriculumRow {
   department: string
   receivedDate: string
   submittedBy: string
-  status: 'Received' | 'Under Review' | 'Validated'
+  status: 'Received' | 'Under Review' | 'Validated' | 'Draft'
 }
 
 export interface ProgressCategory {
@@ -161,7 +161,7 @@ export function useOurMockData() {
   const receivedCurricula: ReceivedCurriculumRow[] = [
     { program: 'BS Computer Science', curriculumYear: '2025 – 2026', department: 'BSCS', receivedDate: 'Jun 10, 2026', submittedBy: 'College of Science', status: 'Validated' },
     { program: 'BS Information Technology', curriculumYear: '2026 – 2027', department: 'BSIT', receivedDate: 'Jun 12, 2026', submittedBy: 'College of Science', status: 'Under Review' },
-    { program: 'BS Teacher Education', curriculumYear: '2025 – 2026', department: 'BSTE', receivedDate: 'Jun 14, 2026', submittedBy: 'College of Education', status: 'Received' },
+    { program: 'BS Teacher Education', curriculumYear: '2025 – 2026', department: 'BSTE', receivedDate: 'Jun 14, 2026', submittedBy: 'College of Education', status: 'Draft' },
   ]
 
   const studentSummary: StudentSummary = {

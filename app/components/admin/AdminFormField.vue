@@ -4,6 +4,7 @@ defineProps<{
   modelValue?: string
   type?: 'text' | 'select'
   placeholder?: string
+  labelClass?: string
 }>()
 
 defineEmits<{ 'update:modelValue': [value: string] }>()
@@ -14,7 +15,7 @@ const fieldClass =
 
 <template>
   <div>
-    <label class="mb-2 block text-sm font-medium text-slate-700">{{ label }}</label>
+    <label :class="['mb-2 block text-sm font-medium', labelClass || 'text-slate-700']">{{ label }}</label>
     <select
       v-if="type === 'select'"
       :value="modelValue"

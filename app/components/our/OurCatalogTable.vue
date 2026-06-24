@@ -22,30 +22,31 @@ defineProps<{ semester: CatalogSemester }>()
             <th class="px-3 py-2.5 text-center">Grades</th>
             <th class="px-3 py-2.5">AY &amp; Sem Taken</th>
             <th class="px-3 py-2.5">Prerequisites</th>
-            <th class="px-3 py-2.5 text-center">Status</th>
-            <th class="px-3 py-2.5">Remarks</th>
+            <th class="px-3 py-2.5 text-center">Remarks</th>
           </tr>
         </thead>
         <tbody class="divide-y divide-slate-100">
-          <tr v-for="course in semester.courses" :key="course.code" class="hover:bg-slate-50/80">
+          <tr
+            v-for="course in semester.courses"
+            :key="course.code"
+            :class="course.grade === 'INC' ? 'bg-red-50 hover:bg-red-100' : 'hover:bg-slate-50/80'"
+          >
             <td class="px-3 py-2 font-semibold text-up-maroon">{{ course.code }}</td>
             <td class="px-3 py-2 text-slate-700">{{ course.title }}</td>
             <td class="px-3 py-2 text-center text-slate-700">{{ course.units }}</td>
             <td
-              class="px-3 py-2 text-center font-medium"
-              :class="course.grade === 'INC' ? 'text-red-600' : 'text-slate-700'"
+              class="px-3 py-2 text-center"
+              :class="course.grade === 'INC' ? 'font-bold text-red-600' : 'font-medium text-slate-700'"
             >
               {{ course.grade }}
             </td>
             <td class="px-3 py-2 text-slate-600">{{ course.aySemTaken }}</td>
             <td class="px-3 py-2 text-slate-500">{{ course.prerequisite || '—' }}</td>
-            <td class="px-3 py-2 text-center">
-              <OurStatusBadge
-                :label="course.status"
-                :variant="ourStatusVariant(course.status)"
-              />
+            <td class="px-3 py-2 text-center text-slate-500">
+              <span v-if="course.grade === 'INC'" class="font-bold text-red-600">Incomplete</span>
+              <span v-else-if="course.grade && course.grade !== 'INC'" class="font-medium text-up-green">Passed</span>
+              <span v-else>—</span>
             </td>
-            <td class="px-3 py-2 text-slate-500">{{ course.remarks || '—' }}</td>
           </tr>
         </tbody>
       </table>

@@ -12,7 +12,7 @@ function submit() {
 </script>
 
 <template>
-  <div class="rounded-2xl border border-slate-200/80 bg-white p-8 shadow-[var(--shadow-card)]">
+  <div>
     <form class="space-y-5" @submit.prevent="submit">
       <div>
         <label for="email" class="mb-2 block text-sm font-medium text-slate-700">Email</label>
@@ -43,9 +43,8 @@ function submit() {
         type="submit"
         class="w-full rounded-xl bg-up-maroon py-2.5 text-sm font-semibold text-white shadow-sm shadow-up-maroon/20 transition hover:bg-up-maroon-dark active:scale-[0.99]"
       >
-        Sign in
+       Login
       </button>
     </form>
-
   </div>
 </template>
