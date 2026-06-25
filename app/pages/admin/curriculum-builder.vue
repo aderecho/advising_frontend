@@ -3,8 +3,6 @@ import { storeToRefs } from 'pinia'
 
 definePageMeta({ layout: 'app' })
 
-const { courses, summaryItems } = useAdminMockData()
-
 const curriculumStore = useCurriculumStore()
 const { curriculumYears, colleges, programs, loading } = storeToRefs(curriculumStore)
 
@@ -62,11 +60,38 @@ watch(courseCode, (newCode) => {
   }, 500)
 })
 
+// Make courses reactive so UI updates when we duplicate
+const mockData = useAdminMockData()
+const courses = ref(mockData.courses)
+const summaryItems = mockData.summaryItems
+
+const selectedYearLevel = ref('')
+const selectedSemester = ref('')
+
 const isCourseSaved = ref(false)
 
 const saveCourse = () => {
-  // In a real app this would add the course to a list/store
+  if (isEditing.value) {
+    const idx = courses.value.findIndex(c => c.code === courseCode.value)
+    if (idx > -1) {
+      courses.value[idx].title = courseTitle.value
+      courses.value[idx].units = parseInt(courseUnits.value) || 0
+      courses.value[idx].prerequisite = coursePrerequisite.value
+      // Note: Assuming course type is LEC for now as the form doesn't specify it
+    }
+    isEditing.value = false
+  } else {
+    courses.value.push({
+      no: courses.value.length + 1,
+      code: courseCode.value,
+      title: courseTitle.value,
+      units: parseInt(courseUnits.value) || 0,
+      type: 'LEC',
+      prerequisite: coursePrerequisite.value || 'None',
+    })
+  }
   isCourseSaved.value = true
+  resetForm()
 }
 
 const isEditing = ref(false)
@@ -94,9 +119,9 @@ const confirmDelete = (course: any) => {
 
 const deleteCourse = () => {
   if (courseToDelete.value) {
-    const index = courses.findIndex(c => c.no === courseToDelete.value.no)
+    const index = courses.value.findIndex(c => c.no === courseToDelete.value.no)
     if (index > -1) {
-      courses.splice(index, 1)
+      courses.value.splice(index, 1)
     }
   }
   showDeleteModal.value = false
@@ -111,6 +136,23 @@ const editCourse = (course: any) => {
   isEditing.value = true
   // Scroll to form or highlight it?
   window.scrollTo({ top: 0, behavior: 'smooth' })
+}
+const showDuplicatePreview = ref(false)
+const duplicatedCourses = ref<any[]>([])
+
+const handleDuplicateClick = () => {
+  // Just show the preview of duplicated courses
+  duplicatedCourses.value = courses.value.map(c => ({
+    ...c,
+    no: Math.floor(Math.random() * 10000),
+  }))
+  showDuplicatePreview.value = true
+}
+
+const confirmDuplicate = () => {
+  courses.value.push(...duplicatedCourses.value)
+  showDuplicatePreview.value = false
+  duplicatedCourses.value = []
 }
 </script>
 
@@ -255,24 +297,38 @@ const editCourse = (course: any) => {
           <p class="mt-0.5 text-xs text-white/80">BS Computer Science · 2025–2026</p>
         </div>
         <div class="flex flex-wrap items-end gap-3">
-          <AdminFormField label="Year level" type="select" class="min-w-[140px]" labelClass="text-white">
+          <AdminFormField v-model="selectedYearLevel" label="Year level" type="select" class="min-w-[140px]" labelClass="text-white" inputClass="!bg-white !text-slate-900 !border-slate-200">
+            <option value="" disabled selected>Select year level</option>
             <option value="1">1st Year</option>
             <option value="2">2nd Year</option>
             <option value="3">3rd Year</option>
             <option value="4">4th Year</option>
             <option value="5">5th Year</option>
           </AdminFormField>
-          <AdminFormField label="Semester" type="select" class="min-w-[140px]" labelClass="text-white">
+          <AdminFormField v-model="selectedSemester" label="Semester" type="select" class="min-w-[140px]" labelClass="text-white" inputClass="!bg-white !text-slate-900 !border-slate-200">
+            <option value="" disabled selected>Select semester</option>
             <option value="1">1st Semester</option>
             <option value="2">2nd Semester</option>
             <option value="3">Midyear</option>
           </AdminFormField>
-          <AdminButton variant="primary-sm" class="mb-0.5">Duplicate semesters</AdminButton>
+          <AdminButton variant="primary-sm" class="mb-0.5" @click="handleDuplicateClick" :disabled="!selectedYearLevel || !selectedSemester || courses.length === 0">Duplicate semesters</AdminButton>
         </div>
       </div>
     </template>
     <AdminCourseTable :courses="courses" @edit="editCourse" @delete="confirmDelete" />
   </AdminCard>
+
+  <div v-if="showDuplicatePreview" class="mt-8 animate-in fade-in slide-in-from-top-4 duration-500">
+    <div class="mb-2 flex items-center justify-end rounded-t-xl bg-up-green/20 px-4 py-3">
+      <button 
+        @click="confirmDuplicate"
+        class="rounded-full bg-up-green px-6 py-1.5 text-sm font-semibold text-white shadow-md transition hover:bg-up-green-dark hover:shadow-lg"
+      >
+        Duplicate
+      </button>
+    </div>
+    <AdminCourseTable :courses="duplicatedCourses" variant="success" @edit="editCourse" @delete="() => {}" />
+  </div>
 
   <Teleport to="body">
     <div

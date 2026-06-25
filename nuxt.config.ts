@@ -32,11 +32,11 @@ export default defineNuxtConfig({
   nitro: {
     devProxy: {
       '/api': {
-        target: 'http://127.0.0.1:8000/api',
+        target: 'http://localhost/advising_management/advising_backend/public/api',
         changeOrigin: true,
       },
       '/sanctum': {
-        target: 'http://127.0.0.1:8000/sanctum',
+        target: 'http://localhost/advising_management/advising_backend/public/sanctum',
         changeOrigin: true,
       },
     },

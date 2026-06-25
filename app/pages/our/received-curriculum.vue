@@ -16,6 +16,22 @@ const startReview = (curriculum: any) => {
 const exitReview = () => {
   selectedCurriculum.value = null
 }
+
+const showApproveModal = ref(false)
+const isPublishing = ref(false)
+
+const handleApprovePublish = () => {
+  isPublishing.value = true
+  setTimeout(() => {
+    isPublishing.value = false
+    showApproveModal.value = false
+    if (selectedCurriculum.value) {
+      selectedCurriculum.value.status = 'Active' // Mock updating status
+    }
+    // Optionally return to list view
+    // selectedCurriculum.value = null
+  }, 600)
+}
 </script>
 
 <template>
@@ -75,7 +91,7 @@ const exitReview = () => {
           <button @click="exitReview" class="rounded-lg bg-slate-100 px-4 py-2 text-sm font-semibold text-slate-700 transition hover:bg-slate-200">
             Reject & Return
           </button>
-          <button @click="exitReview" class="rounded-lg bg-up-green px-4 py-2 text-sm font-semibold text-white transition hover:bg-[#095D42]">
+          <button @click="showApproveModal = true" class="rounded-lg bg-up-green px-4 py-2 text-sm font-semibold text-white transition hover:bg-[#095D42]">
             Approve & Publish
           </button>
         </div>
@@ -122,4 +138,13 @@ const exitReview = () => {
       </div>
     </div>
   </OurPageShell>
+
+  <OurPublishModal
+    :open="showApproveModal"
+    :loading="isPublishing"
+    :program="selectedCurriculum?.program"
+    :curriculum-year="selectedCurriculum?.curriculumYear"
+    @close="showApproveModal = false"
+    @confirm="handleApprovePublish"
+  />
 </template>

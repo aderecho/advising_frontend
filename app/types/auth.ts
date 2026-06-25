@@ -10,7 +10,7 @@ export interface User {
 export const roleDashboardRoutes: Record<UserRole, string> = {
   admin: '/admin/curriculum-builder',
   our: '/our/course-catalog',
-  adviser: '/adviser/dashboard',
+  adviser: '/adviser/assigned-classes',
   student: '/student/dashboard',
   evaluator: '/evaluator/dashboard',
 }
