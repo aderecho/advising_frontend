@@ -256,10 +256,16 @@ const editCourse = (course: any) => {
         </div>
         <div class="flex flex-wrap items-end gap-3">
           <AdminFormField label="Year level" type="select" class="min-w-[140px]" labelClass="text-white">
-            <option selected>1st Year</option>
+            <option value="1">1st Year</option>
+            <option value="2">2nd Year</option>
+            <option value="3">3rd Year</option>
+            <option value="4">4th Year</option>
+            <option value="5">5th Year</option>
           </AdminFormField>
           <AdminFormField label="Semester" type="select" class="min-w-[140px]" labelClass="text-white">
-            <option selected>1st Semester</option>
+            <option value="1">1st Semester</option>
+            <option value="2">2nd Semester</option>
+            <option value="3">Midyear</option>
           </AdminFormField>
           <AdminButton variant="primary-sm" class="mb-0.5">Duplicate semesters</AdminButton>
         </div>
