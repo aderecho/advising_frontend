@@ -5,6 +5,7 @@ defineProps<{
   type?: 'text' | 'select'
   placeholder?: string
   labelClass?: string
+  inputClass?: string
 }>()
 
 defineEmits<{ 'update:modelValue': [value: string] }>()
@@ -19,7 +20,7 @@ const fieldClass =
     <select
       v-if="type === 'select'"
       :value="modelValue"
-      :class="fieldClass"
+      :class="[fieldClass, inputClass]"
       @change="$emit('update:modelValue', ($event.target as HTMLSelectElement).value)"
     >
       <slot />
@@ -29,7 +30,7 @@ const fieldClass =
       :type="type || 'text'"
       :value="modelValue"
       :placeholder="placeholder"
-      :class="fieldClass"
+      :class="[fieldClass, inputClass]"
       @input="$emit('update:modelValue', ($event.target as HTMLInputElement).value)"
     >
   </div>

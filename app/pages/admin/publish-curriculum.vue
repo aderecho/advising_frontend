@@ -4,6 +4,20 @@ definePageMeta({ layout: 'app' })
 const { publishedPrograms, curriculumYears } = useAdminMockData()
 
 const curriculumYear = ref('2026-2027')
+const selectedProgram = ref('BS Information Technology')
+
+const showPublishModal = ref(false)
+const isPublishing = ref(false)
+
+const handlePublish = () => {
+  isPublishing.value = true
+  // Mock publish delay
+  setTimeout(() => {
+    isPublishing.value = false
+    showPublishModal.value = false
+    // Here we'd typically show a success toast or update the list
+  }, 1000)
+}
 </script>
 
 <template>
@@ -19,9 +33,10 @@ const curriculumYear = ref('2026-2027')
       description="Choose the program and term before publishing."
     >
       <div class="grid gap-5 sm:grid-cols-2">
-        <AdminFormField label="Program" type="select">
+        <AdminFormField v-model="selectedProgram" label="Program" type="select">
           <option value="">Select program</option>
-          <option selected>BS Information Technology</option>
+          <option value="BS Information Technology">BS Information Technology</option>
+          <option value="BS Computer Science">BS Computer Science</option>
         </AdminFormField>
         <AdminFormField v-model="curriculumYear" label="Curriculum year" type="select">
           <option value="">Select curriculum year</option>
@@ -46,7 +61,7 @@ const curriculumYear = ref('2026-2027')
       </div>
 
       <div class="mt-8 flex flex-wrap gap-3 border-t border-slate-100 pt-6">
-        <AdminButton>Publish curriculum</AdminButton>
+        <AdminButton @click="showPublishModal = true">Publish curriculum</AdminButton>
         <AdminButton variant="secondary">Cancel</AdminButton>
       </div>
     </AdminCard>
@@ -75,4 +90,13 @@ const curriculumYear = ref('2026-2027')
       </ul>
     </AdminCard>
   </div>
+
+  <AdminPublishModal
+    :open="showPublishModal"
+    :loading="isPublishing"
+    :program="selectedProgram"
+    :curriculum-year="curriculumYear"
+    @close="showPublishModal = false"
+    @confirm="handlePublish"
+  />
 </template>

@@ -38,7 +38,10 @@ export const navSections: NavSection[] = [
   {
     title: 'Advisement',
     items: [
-      { label: 'Dashboard', to: '/adviser/dashboard', roles: ['adviser'], icon: 'dashboard' },
+      { label: 'Assigned Classes', to: '/adviser/assigned-classes', roles: ['adviser'], icon: 'catalog' },
+      { label: 'List of Students', to: '/adviser/list-of-students', roles: ['adviser'], icon: 'students' },
+      { label: 'Student Profile', to: '/adviser/student-profile', roles: ['adviser'], icon: 'profile' },
+      { label: 'Checklist & Flags', to: '/adviser/checklist-flags', roles: ['adviser'], icon: 'flags' },
     ],
   },
   {
@@ -63,7 +66,10 @@ export const pageTitles: Record<string, string> = {
   '/our/course-catalog': 'Course Catalog',
   '/our/monitor': 'Monitor Curriculum & Classes',
   '/our/student-summary': 'Student Academic Summary',
-  '/adviser/dashboard': 'Adviser Dashboard',
+  '/adviser/assigned-classes': 'Assigned Classes',
+  '/adviser/list-of-students': 'List of Students',
+  '/adviser/student-profile': 'Student Profile',
+  '/adviser/checklist-flags': 'Checklist & Flags',
   '/student/dashboard': 'Academic Advisement',
   '/evaluator/dashboard': 'Evaluator Dashboard',
 }

@@ -56,6 +56,25 @@ const trendArea = computed(() => {
   const base = 160 - 24
   return `${pts[0].x},${base} ${trendLine.value} ${pts[pts.length - 1].x},${base}`
 })
+
+const showReviewModal = ref(false)
+const selectedWarning = ref<any>(null)
+
+const openReviewModal = (warning: any) => {
+  selectedWarning.value = warning
+  showReviewModal.value = true
+}
+
+const resolveWarning = () => {
+  if (selectedWarning.value) {
+    const index = warnings.findIndex(w => w.message === selectedWarning.value.message)
+    if (index > -1) {
+      warnings.splice(index, 1) // Remove from array
+    }
+  }
+  showReviewModal.value = false
+  selectedWarning.value = null
+}
 </script>
 
 <template>
@@ -311,7 +330,11 @@ const trendArea = computed(() => {
             <p class="text-sm font-semibold text-slate-800">{{ profile.name }}</p>
             <p class="text-xs text-red-600">{{ profile.studentId }} — {{ warning.message }}</p>
           </div>
-          <button type="button" class="rounded-lg bg-up-maroon px-4 py-1.5 text-xs font-semibold text-white hover:bg-up-maroon-dark">
+          <button 
+            type="button" 
+            class="rounded-lg bg-up-maroon px-4 py-1.5 text-xs font-semibold text-white hover:bg-up-maroon-dark"
+            @click="openReviewModal(warning)"
+          >
             Review
           </button>
         </div>
@@ -417,4 +440,60 @@ const trendArea = computed(() => {
       </div>
     </div>
   </OurPageShell>
+
+  <Teleport to="body">
+    <div
+      v-if="showReviewModal"
+      class="fixed inset-0 z-50 flex items-center justify-center bg-black/40 p-4"
+      @click.self="showReviewModal = false"
+    >
+      <div class="relative w-full max-w-md overflow-hidden rounded-xl bg-white p-6 shadow-xl">
+        <div class="mb-4 flex items-start justify-between">
+          <h3 class="text-lg font-bold text-slate-900">Review Warning</h3>
+          <button
+            type="button"
+            class="rounded-lg p-1.5 text-slate-400 transition hover:bg-slate-100 hover:text-slate-600"
+            @click="showReviewModal = false"
+          >
+            <svg class="h-5 w-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+              <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M6 18L18 6M6 6l12 12" />
+            </svg>
+          </button>
+        </div>
+
+        <div class="mb-6 space-y-4">
+          <div class="rounded-lg bg-red-50 p-4">
+            <p class="text-sm font-semibold text-red-800">Warning Details</p>
+            <p class="mt-1 text-sm text-red-600">{{ selectedWarning?.message }}</p>
+          </div>
+          
+          <div>
+            <label class="mb-1.5 block text-xs font-medium text-slate-600">Resolution Note (Optional)</label>
+            <textarea 
+              class="w-full rounded-lg border border-slate-200 p-3 text-sm focus:border-up-maroon focus:ring-1 focus:ring-up-maroon"
+              rows="3"
+              placeholder="Add details about how this is being resolved..."
+            ></textarea>
+          </div>
+        </div>
+
+        <div class="flex justify-end gap-3">
+          <button
+            type="button"
+            class="rounded-lg bg-slate-100 px-4 py-2 text-sm font-semibold text-slate-700 transition hover:bg-slate-200"
+            @click="showReviewModal = false"
+          >
+            Cancel
+          </button>
+          <button
+            type="button"
+            class="rounded-lg bg-up-maroon px-4 py-2 text-sm font-semibold text-white transition hover:bg-up-maroon-dark"
+            @click="resolveWarning"
+          >
+            Mark as Resolved
+          </button>
+        </div>
+      </div>
+    </div>
+  </Teleport>
 </template>

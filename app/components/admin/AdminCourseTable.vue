@@ -1,7 +1,10 @@
 <script setup lang="ts">
 import type { CourseRow } from '~/composables/useAdminMockData'
 
-defineProps<{ courses: CourseRow[] }>()
+defineProps<{
+  courses: CourseRow[]
+  variant?: 'default' | 'success'
+}>()
 
 defineEmits<{
   edit: [course: CourseRow]
@@ -12,11 +15,17 @@ const totalUnits = (courses: CourseRow[]) => courses.reduce((sum, c) => sum + c.
 </script>
 
 <template>
-  <div class="overflow-hidden rounded-2xl border border-slate-200/80 bg-white">
+  <div
+    class="overflow-hidden rounded-2xl border bg-white"
+    :class="variant === 'success' ? 'border-up-green/30 shadow-lg shadow-up-green/5' : 'border-slate-200/80'"
+  >
     <div class="overflow-x-auto">
       <table class="min-w-full text-sm">
         <thead>
-          <tr class="border-b border-slate-200 bg-slate-50/80 text-left text-xs font-semibold text-slate-600">
+          <tr
+            class="border-b text-left text-xs font-semibold"
+            :class="variant === 'success' ? 'border-up-green bg-up-green-dark text-white' : 'border-slate-200 bg-slate-50/80 text-slate-600'"
+          >
             <th class="px-5 py-3.5 text-center">#</th>
             <th class="px-5 py-3.5">Course code</th>
             <th class="px-5 py-3.5">Course title</th>
@@ -26,22 +35,27 @@ const totalUnits = (courses: CourseRow[]) => courses.reduce((sum, c) => sum + c.
             <th class="px-5 py-3.5 text-center">Actions</th>
           </tr>
         </thead>
-        <tbody class="divide-y divide-slate-100">
+        <tbody class="divide-y" :class="variant === 'success' ? 'divide-up-green/10' : 'divide-slate-100'">
           <tr
-            v-for="course in courses"
+            v-for="(course, index) in courses"
             :key="course.no"
-            class="transition-colors hover:bg-up-green/[0.03]"
+            class="transition-colors"
+            :class="[
+              variant === 'success' 
+                ? (index % 2 === 0 ? 'bg-white' : 'bg-up-green/10') 
+                : 'hover:bg-up-green/[0.03]'
+            ]"
           >
-            <td class="px-5 py-3.5 text-center text-slate-500">{{ course.no }}</td>
-            <td class="px-5 py-3.5 font-semibold text-up-maroon">{{ course.code }}</td>
+            <td class="px-5 py-3.5 text-center" :class="variant === 'success' ? 'text-slate-700' : 'text-slate-500'">{{ course.no }}</td>
+            <td class="px-5 py-3.5 font-semibold" :class="variant === 'success' ? 'text-up-green-dark' : 'text-up-maroon'">{{ course.code }}</td>
             <td class="px-5 py-3.5 text-slate-800">{{ course.title }}</td>
-            <td class="px-5 py-3.5 text-center text-slate-700">{{ course.units }}</td>
+            <td class="px-5 py-3.5 text-center" :class="variant === 'success' ? 'font-medium text-slate-800' : 'text-slate-700'">{{ course.units }}</td>
             <td class="px-5 py-3.5 text-center">
-              <span class="inline-flex rounded-md bg-up-green px-2 py-0.5 text-xs font-medium text-white">
+              <span class="inline-flex rounded-md px-2 py-0.5 text-xs font-medium" :class="variant === 'success' ? 'bg-up-green-dark text-white' : 'bg-up-green text-white'">
                 {{ course.type }}
               </span>
             </td>
-            <td class="px-5 py-3.5 text-slate-500">{{ course.prerequisite }}</td>
+            <td class="px-5 py-3.5" :class="variant === 'success' ? 'text-slate-700' : 'text-slate-500'">{{ course.prerequisite }}</td>
             <td class="px-5 py-3.5">
               <div class="flex items-center justify-center gap-1">
                 <button
@@ -70,8 +84,11 @@ const totalUnits = (courses: CourseRow[]) => courses.reduce((sum, c) => sum + c.
         </tbody>
       </table>
     </div>
-    <div class="flex items-center justify-between border-t border-slate-200 bg-slate-50/60 px-5 py-3.5 text-sm font-bold">
-      <span class="text-slate-700">Total units</span>
+    <div
+      class="flex items-center justify-between border-t px-5 py-3.5 text-sm font-bold"
+      :class="variant === 'success' ? 'border-up-green/20 bg-slate-200' : 'border-slate-200 bg-slate-50/60'"
+    >
+      <span class="text-slate-700">{{ variant === 'success' ? 'Current total units:' : 'Total units' }}</span>
       <span class="text-up-green">{{ totalUnits(courses) }}</span>
     </div>
   </div>
