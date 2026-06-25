@@ -2,7 +2,7 @@
   <div class="relative flex min-h-screen items-center justify-center p-6">
     <!-- Background Image with Dark Overlay -->
     <div class="absolute inset-0 z-0">
-      <img src="/images/up-cebu.png" alt="UP Cebu Campus" class="h-full w-full object-cover" />
+      <img src="/up-cebu.png" alt="UP Cebu Campus" class="h-full w-full object-cover" />
       <div class="absolute inset-0 bg-black/60"></div>
     </div>
     
